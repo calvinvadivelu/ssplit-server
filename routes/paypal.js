@@ -77,9 +77,7 @@ router.post('/createSubscription', async(req, res) => {
             pricePerPerson: req.body.pricePerPerson,
             sharers: req.body.sharers
         })
-        subscription.save().then(res => {
-            console.log('res :', res);
-        })
+        subscription.save()
         .catch(err => console.log(err))    
 
 
@@ -89,10 +87,19 @@ router.post('/createSubscription', async(req, res) => {
     }
 })
 
+router.patch('/confirmSharer', async(req, res) => {
+    const { planId, sharerEmail, sharerConfirmationId } = req.body
+    const subscription = await Subscription.findOne({ planId: planId })
+    subscription.sharers.find(sharer => sharer.email === sharerEmail).confirmationId = sharerConfirmationId
+    const response = await subscription.save()
+    console.log('response of confirm sharer:', response);
+    res.send(response)
+})
+
 router.get('/plandetails', async(req, res) => {
-    const { plan_id } = req.query
+    const { planId } = req.query
     try {
-        await Subscription.findOne({ planId: plan_id }, (err, subscription) => {
+        await Subscription.findOne({ planId: planId }, (err, subscription) => {
             res.send(subscription)
         })
     } catch(error) {
