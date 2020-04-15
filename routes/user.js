@@ -5,9 +5,7 @@ const router = express.Router();
 const User = require('../models/User');
 
 router.get('/getUser', async(req, res) => {
-    console.log('req.query.email :', req.query.email);
     await User.findOne({ email: req.query.email }, (err, user) => {
-        console.log('user :', user);
         res.send(user)
     })
 })
@@ -20,9 +18,8 @@ router.post('/createUser', async(req, res) => {
         email: req.body.email
     })
 
-    user.save().then(res => {
-        console.log('res :', res);
-    }).catch(err => console.log(err))
+    user.save()
+    .catch(err => console.log(err))
 })
 
 module.exports = router
