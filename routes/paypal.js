@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const Subscription = require('../models/Subscription');
+const Payout = require('../models/Payout');
 
 const ACCESS_TOKEN = process.env.PAYPAL_TOKEN
 
@@ -87,6 +88,23 @@ router.post('/createSubscription', async(req, res) => {
     }
 })
 
+router.post('/createPayout', async(req, res) => {
+
+    const payout = new Payout({
+        _id: new mongoose.Types.ObjectId(),
+        recipient_type: req.body.type,
+        sender_item_id: req.body.senderId,
+        amount: req.body.amount,
+        receiver: req.body.receiverAddress,
+        subscriptionPlanId: req.body.planId,
+    })
+    payout.save().then(response => {
+        res.send(response)
+    })
+    .catch(err => console.log(err))
+
+})
+
 router.patch('/confirmSharer', async(req, res) => {
     const { planId, sharerEmail, sharerConfirmationId } = req.body
     const subscription = await Subscription.findOne({ planId: planId })
@@ -106,5 +124,6 @@ router.get('/plandetails', async(req, res) => {
         console.log('error :', error);
     }
 })
+
 
 module.exports = router
