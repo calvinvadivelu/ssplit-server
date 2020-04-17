@@ -1,5 +1,5 @@
 # ssplit-server
-Backend for ssplit
+Backend for ssplit.io
 
 To get it up and running hit:
 yarn-server
