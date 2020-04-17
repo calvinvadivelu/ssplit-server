@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const nodemailer = require("nodemailer");
 require('dotenv/config')
 
 const app = express();
@@ -20,6 +19,10 @@ app.use('/paypal', paypalRoutes)
 const userRoutes = require('./routes/user')
 app.use('/user', userRoutes)
 
+//EMAIL ROUTES
+const emailRoutes = require('./routes/email');
+app.use('/email', emailRoutes)
+
 //CONNECT TO DB
 mongoose.connect(
   process.env.DB_CONNECTION,
@@ -29,30 +32,6 @@ mongoose.connect(
   },
   () => { console.log('Connected to db!')}
 )
-
-
-app.post('/sendEmails', (req, res) => {
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.EMAIL_PW
-    }
-  });
-  const { recipients, owner, subscription_name, link } = req.body
-  recipients.forEach(async recipient => {
-    var mailOptions = { 
-      from: 'subscription@ssplit.com',
-      to: recipient.email,
-      subject: `Sharing ${subscription_name} Subscription with ${owner}`,
-      text: `Click this link to add your paypal to the subscription process and start contributing monthly ${link}`
-    };
-
-    let info = await transporter.sendMail(mailOptions)
-    console.log(`message sent: ${info.messageId}`)
-    res.send(info.messageId)
-  });
-})
 
 
 //idek why this is here still...
