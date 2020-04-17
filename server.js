@@ -33,11 +33,4 @@ mongoose.connect(
   () => { console.log('Connected to db!')}
 )
 
-
-//idek why this is here still...
-app.get('/favicon.ico', (req, res) => {
-  console.log('are u srs rn')
-  res.send('bruh')
-})
-
 app.listen(port, () => console.log(`Listening on port ${port}`));
