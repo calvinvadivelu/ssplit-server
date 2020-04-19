@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
+const scheduler = require('./payments/scheduler');
+
 require('dotenv/config')
 
 const app = express();
@@ -32,5 +35,8 @@ mongoose.connect(
   },
   () => { console.log('Connected to db!')}
 )
+
+//SCHEDULER FOR PAYMENTS
+scheduler();
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
