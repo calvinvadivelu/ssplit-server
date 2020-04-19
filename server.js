@@ -26,6 +26,10 @@ app.use('/user', userRoutes)
 const emailRoutes = require('./routes/email');
 app.use('/email', emailRoutes)
 
+//PAYPAL INSTANT PAYMENT NOTIFICATION ROUTES
+const ipnRoute = require('./routes/ipn');
+app.use('/ipn', ipnRoute)
+
 //CONNECT TO DB
 mongoose.connect(
   process.env.DB_CONNECTION,
