@@ -43,16 +43,15 @@ const ipnHandler = (req, res) => {
                     console.log('SUBSCRIBER SIGNING UP FOR RECURRING PAYMENT');
                     const subscriptionId = body.recurring_payment_id
                     const payerId = body.payer_id
-                    let subscription = await Subscription.findOne({
-                        'sharers.subscriptionId' : subscriptionId,
+                    let subscription = await Subscription.findOne({ //  need to do smthn if subscription doesnt exist
+                        'sharers.subscriptionId' : subscriptionId,  //  because that's a major problem
                         'sharers.payerId' : payerId
                     })
-                    // console.log(subscription)
-                    console.log(subscription);
+                    console.log(`SHARER ${payerId} SIGNED UP FOR PAYMENTS FOR ${subscriptionId}`);
                     break;
                 }
                 case 'recurring_payment': {
-                    console.log('RECURRING PAYMENT');
+                    console.log('SUSBCRIBER PAYING RECURRING PAYMENT');
                     const payerId = body.payer_id
                     const subscriptionId = body.recurring_payment_id
                     let subscription = await Subscription.findOne({
@@ -62,7 +61,7 @@ const ipnHandler = (req, res) => {
                     const indexOfSharer = subscription.sharers.findIndex(sharer => (sharer.subscriptionId === subscriptionId && sharer.payerId === payerId))
                     subscription.sharers[indexOfSharer].paid = true;
                     subscription.save().catch(err => console.log(err));
-                    console.log("SHARER PAID IN", subscription.name)
+                    console.log(`SHARER ${payerId} PAID FOR ${subscriptionId}`);
                     break;
                 }
                 default:
