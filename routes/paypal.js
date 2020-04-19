@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const Subscription = require('../models/Subscription');
-const Payout = require('../models/Payout');
 
 const AxConf = {
     headers: {
@@ -90,23 +89,6 @@ router.post('/createSubscription', async(req, res) => {
     }
 })
 
-router.post('/createPayout', async(req, res) => {
-
-    const payout = new Payout({
-        _id: new mongoose.Types.ObjectId(),
-        recipient_type: req.body.type,
-        sender_item_id: req.body.senderId,
-        amount: req.body.amount,
-        receiver: req.body.receiverAddress,
-        subscriptionPlanId: req.body.planId,
-        payoutDate: req.body.payoutDate,
-    })
-    payout.save().then(response => {
-        res.send(response)
-    })
-    .catch(err => console.log(err))
-
-})
 
 router.patch('/confirmSharer', async(req, res) => {
     const { planId, payerId, sharerEmail, subscriptionId } = req.body
