@@ -41,6 +41,7 @@ mongoose.connect(
 )
 
 //SCHEDULER FOR PAYMENTS
-scheduler();
+// scheduler();
+//REMOVED - Payouts won't work until my PayPal account is authorized for payouts :(
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
