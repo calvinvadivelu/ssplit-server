@@ -4,13 +4,10 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const Subscription = require('../models/Subscription');
-const Payout = require('../models/Payout');
-
-const ACCESS_TOKEN = process.env.PAYPAL_TOKEN
 
 const AxConf = {
     headers: {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      Authorization: `Bearer ${process.env.PAYPAL_TOKEN}`,
       'Content-Type': 'application/json'
     }
 };
@@ -76,7 +73,11 @@ router.post('/createSubscription', async(req, res) => {
             category: req.body.category,
             totalPrice: req.body.totalPrice,
             pricePerPerson: req.body.pricePerPerson,
-            sharers: req.body.sharers
+            currency: req.body.currency,
+            sharers: req.body.sharers,
+            receivingMethod: req.body.receivingMethod,
+            receiverAddress: req.body.receiverAddress,
+            payoutDate: req.body.payoutDate
         })
         subscription.save()
         .catch(err => console.log(err))    
@@ -88,29 +89,14 @@ router.post('/createSubscription', async(req, res) => {
     }
 })
 
-router.post('/createPayout', async(req, res) => {
-
-    const payout = new Payout({
-        _id: new mongoose.Types.ObjectId(),
-        recipient_type: req.body.type,
-        sender_item_id: req.body.senderId,
-        amount: req.body.amount,
-        receiver: req.body.receiverAddress,
-        subscriptionPlanId: req.body.planId,
-    })
-    payout.save().then(response => {
-        res.send(response)
-    })
-    .catch(err => console.log(err))
-
-})
 
 router.patch('/confirmSharer', async(req, res) => {
-    const { planId, sharerEmail, sharerConfirmationId } = req.body
+    const { planId, payerId, sharerEmail, subscriptionId } = req.body
     const subscription = await Subscription.findOne({ planId: planId })
-    subscription.sharers.find(sharer => sharer.email === sharerEmail).confirmationId = sharerConfirmationId
+    let sharer = subscription.sharers.find(sharer => sharer.email === sharerEmail)
+    sharer.subscriptionId = subscriptionId
+    sharer.payerId = payerId
     const response = await subscription.save()
-    console.log('response of confirm sharer:', response);
     res.send(response)
 })
 

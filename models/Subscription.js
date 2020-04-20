@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
 
+const sharerSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    name: String,
+    email: String,
+    payerId: {type: String, default: null},
+    subscriptionId: {type: String, default: null},
+    paid: {type: Boolean, default: false}
+})
+
 const subscriptionSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     planId: String,
@@ -11,7 +20,12 @@ const subscriptionSchema = mongoose.Schema({
     category: String,
     totalPrice: Number,
     pricePerPerson: Number,
+    currency: String,
+    sharers: [sharerSchema],
+    receivingMethod: String,
+    receiverAddress: String,
+    payoutDate: Number,
     date: { type: Date, default: Date.now },
-    sharers: [{ name: String, email: String, confirmationId: {type: String, default: null} }]
 })
+
 module.exports = mongoose.model('Subscription', subscriptionSchema)
