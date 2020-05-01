@@ -13,7 +13,6 @@ const AxConf = {
 };
 
 router.post('/createSubscription', async(req, res) => {
-
     let productAxBody = {
         name: req.body.name,
         description: req.body.description,
@@ -36,7 +35,7 @@ router.post('/createSubscription', async(req, res) => {
                 total_cycles: 0,
                 pricing_scheme: {
                     fixed_price: {
-                        value: req.body.pricePerPerson,
+                        value: req.body.pricePerPerson.toString(),
                         currency_code: "USD"
                     }
                 }
