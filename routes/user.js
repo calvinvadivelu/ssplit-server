@@ -15,11 +15,13 @@ router.post('/createUser', async(req, res) => {
     let user = new User({
         _id: new mongoose.Types.ObjectId(),
         fullName: req.body.fullName,
-        email: req.body.email
+        email: req.body.email,
+        subscriptions: req.body.subscriptions
     })
 
-    user.save()
+    const response = await user.save()
     .catch(err => console.log(err))
+    res.send(response)
 })
 
 module.exports = router
