@@ -4,6 +4,6 @@ const userSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     fullName: String,
     email: String,
-    subscriptions: [mongoose.Schema.Types.ObjectId],
+    subscriptions: [String],
 })
 module.exports = mongoose.model('User', userSchema)

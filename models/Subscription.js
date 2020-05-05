@@ -13,7 +13,7 @@ const subscriptionSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     planId: String,
     prodId: String,
-    ownerInfo: { name: String, email: String },
+    ownerInfo: { name: String, email: String, id: String },
     name: String,
     description: String,
     type: String,

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const Subscription = require('../models/Subscription');
+const User = require('../models/User');
 
 const AxConf = {
     headers: {
@@ -58,7 +59,8 @@ router.post('/createSubscription', async(req, res) => {
         console.log(`Finished Creating Product ${productData.id}`)
         planAxBody.product_id = productData.id
         const createPlanResponse = await axios.post('https://api.sandbox.paypal.com/v1/billing/plans', planAxBody, AxConf)
-        console.log('Finished Creating Plan');
+        const planData = createPlanResponse.data
+        console.log(`Finished Creating Plan ${planData.id}`);
 
         //SAVE TO DB
         const subscription = new Subscription({
@@ -80,9 +82,12 @@ router.post('/createSubscription', async(req, res) => {
         })
         subscription.save()
         .catch(err => console.log(err))    
+        // *** need to check if error with saving *** //
+        const owner = await User.findById(req.body.ownerInfo.id) 
+        owner.subscriptions.push(planData.id) 
+        await owner.save()
 
-
-        res.send(createPlanResponse.data)
+        res.send(planData)
     } catch (error) {
         console.log('error :', error);
     }
