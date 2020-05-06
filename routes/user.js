@@ -3,11 +3,28 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const User = require('../models/User');
-
+const Subscription = require('../models/Subscription');
 router.get('/getUser', async(req, res) => {
-    await User.findOne({ email: req.query.email }, (err, user) => {
-        res.send(user)
-    })
+    let userData = null;
+    await User.findOne({ email: req.query.email }, (err, user) => userData = {...user._doc})
+    
+    const usersSubscriptionList = await Subscription.find({ 'ownerInfo.id' : userData._id })
+    const subscriptionData = usersSubscriptionList.map(subscription => ({
+        planId: subscription.planId,
+        name: subscription.name,
+        description: subscription.description,
+        totalPrice: subscription.totalPrice,
+        pricePerPerson: subscription.pricePerPerson,
+        sharers: subscription.sharers.map(sharer => ({
+            name: sharer.name,
+            email: sharer.email,
+            paid: sharer.paid
+        })),
+        receiverAddress: subscription.receiverAddress,
+        payoutDate: subscription.payoutDate
+    }))
+    userData.subscriptions = subscriptionData
+    res.send(userData)
 })
 
 
