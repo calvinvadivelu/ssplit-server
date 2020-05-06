@@ -115,5 +115,31 @@ router.get('/plandetails', async(req, res) => {
     }
 })
 
+router.get('/usersplans', async(req, res) => {
+    const { userId } = req.query
+    try {
+        const usersSubscriptionList = await Subscription.find({ 'ownerInfo.id' : userId })
+        const subscriptionData = usersSubscriptionList.map(subscription => ({
+            planId: subscription.planId,
+            name: subscription.name,
+            description: subscription.description,
+            totalPrice: subscription.totalPrice,
+            pricePerPerson: subscription.pricePerPerson,
+            sharers: subscription.sharers.map(sharer => ({
+                name: sharer.name,
+                email: sharer.email,
+                paid: sharer.paid
+            })),
+            receiverAddress: subscription.receiverAddress,
+            payoutDate: subscription.payoutDate
+        }))
+
+        res.send(subscriptionData)
+    } catch(error) {
+        console.log('error :', error);
+    }
+
+})
+
 
 module.exports = router
