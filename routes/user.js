@@ -5,9 +5,8 @@ const router = express.Router();
 const User = require('../models/User');
 const Subscription = require('../models/Subscription');
 router.get('/getUser', async(req, res) => {
-    let userData = null;
-    await User.findOne({ email: req.query.email }, (err, user) => userData = {...user._doc})
-    
+    const userResponse = await User.findOne({ email: req.query.email })
+    let userData = userResponse._doc
     const usersSubscriptionList = await Subscription.find({ 'ownerInfo.id' : userData._id })
     const subscriptionData = usersSubscriptionList.map(subscription => ({
         planId: subscription.planId,
