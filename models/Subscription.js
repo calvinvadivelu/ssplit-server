@@ -25,6 +25,7 @@ const subscriptionSchema = mongoose.Schema({
     receivingMethod: String,
     receiverAddress: String,
     payoutDate: Number,
+    dataIndex: Number,
     date: { type: Date, default: Date.now },
 })
 

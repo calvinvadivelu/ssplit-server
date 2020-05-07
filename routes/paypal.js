@@ -61,7 +61,6 @@ router.post('/createSubscription', async(req, res) => {
         const createPlanResponse = await axios.post('https://api.sandbox.paypal.com/v1/billing/plans', planAxBody, AxConf)
         const planData = createPlanResponse.data
         console.log(`Finished Creating Plan ${planData.id}`);
-
         //SAVE TO DB
         const subscription = new Subscription({
             _id: new mongoose.Types.ObjectId(),
@@ -78,6 +77,7 @@ router.post('/createSubscription', async(req, res) => {
             sharers: req.body.sharers,
             receivingMethod: req.body.receivingMethod,
             receiverAddress: req.body.receiverAddress,
+            dataIndex: req.body.dataIndex,
             payoutDate: req.body.payoutDate
         })
         subscription.save()

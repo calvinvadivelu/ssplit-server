@@ -20,6 +20,7 @@ router.get('/getUser', async(req, res) => {
             paid: sharer.paid
         })),
         receiverAddress: subscription.receiverAddress,
+        dataIndex: subscription.dataIndex,
         payoutDate: subscription.payoutDate
     }))
     userData.subscriptions = subscriptionData
