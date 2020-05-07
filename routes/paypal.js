@@ -67,6 +67,7 @@ router.post('/createSubscription', async(req, res) => {
             planId: createPlanResponse.data.id,
             prodId: createPlanResponse.data.product_id,
             name: req.body.name,
+            planName: req.body.planName,
             description: req.body.description,
             ownerInfo: req.body.ownerInfo,
             type: req.body.type,

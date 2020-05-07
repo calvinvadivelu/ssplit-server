@@ -15,6 +15,7 @@ const subscriptionSchema = mongoose.Schema({
     prodId: String,
     ownerInfo: { name: String, email: String, id: String },
     name: String,
+    planName: String,
     description: String,
     type: String,
     category: String,

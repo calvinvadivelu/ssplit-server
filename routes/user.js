@@ -11,6 +11,7 @@ router.get('/getUser', async(req, res) => {
     const subscriptionData = usersSubscriptionList.map(subscription => ({
         planId: subscription.planId,
         name: subscription.name,
+        planName: subscription.planName,
         description: subscription.description,
         totalPrice: subscription.totalPrice,
         pricePerPerson: subscription.pricePerPerson,
